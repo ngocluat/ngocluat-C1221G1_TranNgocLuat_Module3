@@ -73,4 +73,8 @@ inner join product p on od.p_id = p.p_id;
  -- Hiển thị tên những khách hàng không mua bất kỳ một sản phẩm nào
 select c.c_name,count(o.c_id) as buy_count from oder o right join customer c on o.c_id = c.c_id group by o.o_id having buy_count = 0;
  
- -- Hiển thị mã hóa đơn, ngày bán và giá tiền của từng hóa đơn (giá một hóa đơn được tính bằng tổng giá bán của từng loại mặt hàng xuất hiện trong hóa đơn. Giá bán của từng loại được tính = odQTY*pPrice)
+ -- Hiển thị mã hóa đơn, ngày bán và giá tiền của từng hóa đơn (giá một hóa đơn được tính bằng tổng
+ -- giá bán của từng loại mặt hàng xuất hiện trong hóa đơn. Giá bán của từng loại được tính = odQTY*pPrice)
+ select  o.o_id , o_date, price from oder o join oder_detail od on o.o_id=od.o_id
+ join product p on o.o_id= p.p_id;
+ 
