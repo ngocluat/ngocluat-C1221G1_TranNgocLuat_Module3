@@ -82,7 +82,7 @@ from mark
          join subject s on Mark.SubId = s.SubId;
 
 -- Hiển thị các thông tin sinh viên và điểm trung bình của mỗi sinh viên, xếp hạng theo thứ tự điểm giảm dần
-select *
-from student
-     join mark m on Student.StudentId = m.StudentId
+select * , avg(s.StudentId) as "điểm trung bình" from student s
+left join mark m on s.StudentId = m.StudentId
+group by StudentName
 order by Mark desc;
