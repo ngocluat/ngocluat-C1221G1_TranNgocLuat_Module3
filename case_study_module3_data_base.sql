@@ -23,8 +23,8 @@ create table bo_phan(
 ma_bo_phan INT primary key auto_increment, 
 ten_bo_phan VARCHAR(45)
 );
-insert into bo_phan values("1",	"Sale-Marketing"),
-("2","Hành chính"),
+insert into bo_phan values(1,	"Sale-Marketing"),
+(2,"Hành chính"),
 ("3","Phục vụ"),
 ("4","Quản lý");
 
@@ -205,7 +205,37 @@ values(1,5, 2, 4),
 select * from nhan_vien where ho_ten like 'h%' or ( ho_ten like 'k%'or ho_ten like 't%') and length(ho_ten)<=15  ;
 
 -- 3.	Hiển thị thông tin của tất cả khách hàng có độ tuổi từ 18 đến 50 tuổi và có địa chỉ ở “Đà Nẵng” hoặc “Quảng Trị”.
-select * from khach_hang where ( now()-ngay_sinh.year)<50 or( now()-ngay_sinh) >18
+select * from khach_hang where ((year(now())-year(ngay_sinh)) between 18 and 50 )and ( dia_chi like "%Đà Nẵng" or dia_chi like "%Quảng Trị");
+
+-- 4.	Đếm xem tương ứng với mỗi khách hàng đã từng đặt phòng bao nhiêu lần.
+-- Kết quả hiển thị được sắp xếp tăng dần theo số lần đặt phòng của khách hàng.
+-- Chỉ đếm những khách hàng nào có Tên loại khách hàng là “Diamond”.
+
+select k.ma_khach_hang, k.ho_ten, count(*) as "so_lan_dat" from khach_hang k
+join hop_dong h on k.ma_khach_hang= h.ma_khach_hang
+join loai_khach l on k.ma_loai_khach= l.ma_loai_khach
+where ten_loai_khach_hang like "%Diamond"
+group by k.ma_khach_hang
+order by so_lan_dat  ;
+
+-- 5.	Hiển thị ma_khach_hang, ho_ten, ten_loai_khach, ma_hop_dong, ten_dich_vu, ngay_lam_hop_dong, ngay_ket_thuc, tong_tien 
+-- (Với tổng tiền được tính theo công thức như sau: Chi Phí Thuê + Số Lượng * Giá, với Số Lượng và Giá là từ bảng dich_vu_di_kem, 
+-- hop_dong_chi_tiet) cho tất cả các khách hàng đã từng đặt phòng. (những khách hàng nào chưa từng đặt phòng cũng phải hiển thị ra).
+
+
+
+-- 6.Hiển thị ma_dich_vu, ten_dich_vu, dien_tich, chi_phi_thue, ten_loai_dich_vu của tất cả các loại dịch vụ 
+-- chưa từng được khách hàng thực hiện đặt từ quý 1 của năm 2021 (Quý 1 là tháng 1, 2, 3).
+-- d.ma_dich_vu,d.ten_dich_vu, d.dien_tich ,d.chi_phi_thue, l.ten_loai_dich_vu   and  month(ngay_lam_hop_dong)<4
+select * , count(ma_khach_hang) as "a"from dich_vu d   
+right join hop_dong h on d.ma_dich_vu = h.ma_dich_vu 
+join loai_dich_vu l on d.ma_loai_dich_vu = l.ma_loai_dich_vu 
+group by ma_hop_dong
+
+
+
+
+
 
 
 
