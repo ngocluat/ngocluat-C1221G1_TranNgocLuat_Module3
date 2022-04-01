@@ -200,7 +200,6 @@ values(1,5, 2, 4),
 -- SELECT * FROM case_study_database.hop_dong_chi_tiet;
 
 
-
 -- 2.	Hiển thị thông tin của tất cả nhân viên có trong hệ thống có tên bắt đầu là một trong các ký tự “H”, “T” hoặc “K” và có tối đa 15 kí tự.
 select * from nhan_vien where ho_ten like 'h%' or ( ho_ten like 'k%'or ho_ten like 't%') and length(ho_ten)<=15  ;
 
@@ -218,21 +217,58 @@ where ten_loai_khach_hang like "%Diamond"
 group by k.ma_khach_hang
 order by so_lan_dat  ;
 
--- 5.	Hiển thị ma_khach_hang, ho_ten, ten_loai_khach, ma_hop_dong, ten_dich_vu, ngay_lam_hop_dong, ngay_ket_thuc, tong_tien 
+-- 5. k.ma_khach_hang,k.ho_ten,l.ten_loai_khach_hang, h.ma_hop_dong, d.ten_dich_vu, h.ngay_lam_hop_dong ,h.ngay_ket_thuc
 -- (Với tổng tiền được tính theo công thức như sau: Chi Phí Thuê + Số Lượng * Giá, với Số Lượng và Giá là từ bảng dich_vu_di_kem, 
 -- hop_dong_chi_tiet) cho tất cả các khách hàng đã từng đặt phòng. (những khách hàng nào chưa từng đặt phòng cũng phải hiển thị ra).
-
-
+select * , sum(d.chi_phi_thue+(hd.so_luong*dv.gia))as "tổng tiền" 
+from loai_khach l
+left join khach_hang k on l.ma_loai_khach= k.ma_loai_khach
+left join hop_dong h on k.ma_khach_hang= h.ma_khach_hang
+left join  dich_vu d on h.ma_dich_vu= d.ma_dich_vu
+left join hop_dong_chi_tiet hd on h.ma_hop_dong = hd.ma_hop_dong
+left join dich_vu_di_kem dv on hd.ma_dich_vu_di_kem= dv.ma_dich_vu_di_kem
+group by h.ma_khach_hang 
+-- chưa xong 
+;
 
 -- 6.Hiển thị ma_dich_vu, ten_dich_vu, dien_tich, chi_phi_thue, ten_loai_dich_vu của tất cả các loại dịch vụ 
 -- chưa từng được khách hàng thực hiện đặt từ quý 1 của năm 2021 (Quý 1 là tháng 1, 2, 3).
--- d.ma_dich_vu,d.ten_dich_vu, d.dien_tich ,d.chi_phi_thue, l.ten_loai_dich_vu   and  month(ngay_lam_hop_dong)<4
-select * , count(ma_khach_hang) as "a"from dich_vu d   
-right join hop_dong h on d.ma_dich_vu = h.ma_dich_vu 
-join loai_dich_vu l on d.ma_loai_dich_vu = l.ma_loai_dich_vu 
-group by ma_hop_dong
+-- d.ma_dich_vu,d.ten_dich_vu, d.dien_tich ,d.chi_phi_thue, l.ten_loai_dich_vu        and  month(ngay_lam_hop_dong)<4
+select d.ma_dich_vu,d.ten_dich_vu, d.dien_tich ,d.chi_phi_thue, l.ten_loai_dich_vu from dich_vu d   
+left join hop_dong h on d.ma_dich_vu = h.ma_dich_vu 
+ join loai_dich_vu l on d.ma_loai_dich_vu = l.ma_loai_dich_vu 
+where d.ma_dich_vu not in (select hop_dong.ma_dich_vu from hop_dong where month(hop_dong.ngay_lam_hop_dong) <4 and year(hop_dong.ngay_lam_hop_dong) = 2021)
+group by h.ma_dich_vu;
 
+-- 7.	Hiển thị thông tin ma_dich_vu, ten_dich_vu, dien_tich, so_nguoi_toi_da, chi_phi_thue,
+--  ten_loai_dich_vu của tất cả các loại dịch vụ
+--  đã từng được khách hàng đặt phòng trong năm 2020 nhưng chưa từng được khách hàng đặt phòng trong năm 2021.
 
+select d.ma_dich_vu,d.ten_dich_vu, d.dien_tich ,d.chi_phi_thue, l.ten_loai_dich_vu from dich_vu d   
+left join hop_dong h on d.ma_dich_vu = h.ma_dich_vu 
+ join loai_dich_vu l on d.ma_loai_dich_vu = l.ma_loai_dich_vu 
+where d.ma_dich_vu not  in (
+select hop_dong.ma_dich_vu from hop_dong
+where year(hop_dong.ngay_lam_hop_dong) != 2020 and (year(hop_dong.ngay_lam_hop_dong)=2021 ))
+group by h.ma_dich_vu;
+
+-- 8.	Hiển thị thông tin ho_ten khách hàng có trong hệ thống, với yêu cầu ho_ten không trùng nhau.
+select ho_ten from khach_hang union select ho_ten from khach_hang ;
+select DISTINCT ho_ten from khach_hang;
+select ho_ten from khach_hang group by  ho_ten;
+
+-- 9.Thực hiện thống kê doanh thu theo tháng, nghĩa là tương ứng với mỗi 
+-- tháng trong năm 2021 thì sẽ có bao nhiêu khách hàng thực hiện đặt phòng.
+select month(ngay_lam_hop_dong) , count(h.ma_khach_hang) as 'so_luong_khach_hang'from hop_dong h where year(h.ngay_lam_hop_dong) = 2021
+group by month(h.ngay_lam_hop_dong) ;
+
+-- 10.	Hiển thị thông tin tương ứng với từng hợp đồng thì đã sử dụng bao nhiêu dịch vụ đi kèm.
+-- Kết quả hiển thị bao gồm ma_hop_dong, ngay_lam_hop_dong, ngay_ket_thuc, tien_dat_coc, so_luong_dich_vu_di_kem
+--  (được tính dựa trên việc sum so_luong ở dich_vu_di_kem).
+
+ select h.ma_hop_dong, h.ngay_lam_hop_dong, h.ngay_ket_thuc, h.tien_dat_coc , sum(hd.so_luong) as 'số lượng' from hop_dong h 
+left join hop_dong_chi_tiet hd on h.ma_hop_dong= hd.ma_hop_dong
+ group by h.ma_hop_dong
 
 
 

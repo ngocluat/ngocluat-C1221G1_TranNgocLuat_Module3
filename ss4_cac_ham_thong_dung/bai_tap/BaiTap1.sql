@@ -13,7 +13,7 @@ CREATE TABLE Student
     StudentId   INT         NOT NULL AUTO_INCREMENT PRIMARY KEY,
     StudentName VARCHAR(30) NOT NULL,
     Address     VARCHAR(50),
-    Phone       VARCHAR(20),
+    Phone       VARCHAR(20) not null,
     `Status`    BIT,
     ClassId     INT         NOT NULL,
     FOREIGN KEY (ClassId) REFERENCES Class (ClassID)
@@ -74,15 +74,17 @@ select *
 from Mark;
 -- Hiển thị tất cả các thông tin môn học (bảng subject) có credit lớn nhất.
 select *, max(Credit) as "credit lớn nhất"
-from Subject;
+from `Subject`;
 
 -- Hiển thị các thông tin môn học có điểm thi lớn nhất.
-select StudentId, ExamTimes, max(Mark) as "điểm thi lớn nhất là :"
-from mark
-         join subject s on Mark.SubId = s.SubId;
+select *, max(m.mark) as "điểm thi lớn nhất là :"
+from Mark m 
+join `subject` s on m.SubId = s.SubId;
 
 -- Hiển thị các thông tin sinh viên và điểm trung bình của mỗi sinh viên, xếp hạng theo thứ tự điểm giảm dần
 select * , avg(s.StudentId) as "điểm trung bình" from student s
 left join mark m on s.StudentId = m.StudentId
-group by StudentName
+group by phone 
 order by Mark desc;
+
+-- do em copy bài thực hành để thao tác nên định nghĩa biến bị lỗi sai định dạng  ạ 
