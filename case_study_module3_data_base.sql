@@ -266,12 +266,64 @@ group by month(h.ngay_lam_hop_dong) ;
 -- Kết quả hiển thị bao gồm ma_hop_dong, ngay_lam_hop_dong, ngay_ket_thuc, tien_dat_coc, so_luong_dich_vu_di_kem
 --  (được tính dựa trên việc sum so_luong ở dich_vu_di_kem).
 
- select h.ma_hop_dong, h.ngay_lam_hop_dong, h.ngay_ket_thuc, h.tien_dat_coc , sum(hd.so_luong) as 'số lượng' from hop_dong h 
+select h.ma_hop_dong, h.ngay_lam_hop_dong, h.ngay_ket_thuc, h.tien_dat_coc , sum(hd.so_luong) as 'số lượng' from hop_dong h 
 left join hop_dong_chi_tiet hd on h.ma_hop_dong= hd.ma_hop_dong
- group by h.ma_hop_dong
+group by h.ma_hop_dong  ;
+
+-- 11.	Hiển thị thông tin các dịch vụ đi kèm đã được sử dụng bởi những khách hàng 
+-- có ten_loai_khach là “Diamond”
+--  và có dia_chi ở “Vinh” hoặc “Quảng Ngãi”.
+select
+dvdk.ma_dich_vu_di_kem, dvdk.ten_dich_vu_di_kem
+From
+	dich_vu_di_kem dvdk
+	left join hop_dong_chi_tiet hdct
+		ON hdct.ma_dich_vu_di_kem = dvdk.ma_dich_vu_di_kem
+	left join hop_dong hd
+		ON hd.ma_hop_dong = hdct.ma_hop_dong
+	left join khach_hang kh
+		ON kh.ma_khach_hang = hd.ma_khach_hang
+	left join loai_khach lk
+		ON kh.ma_loai_khach = lk.ma_loai_khach
+where
+( kh.dia_chi like '%Vinh%' or kh.dia_chi like '%Quảng Ngãi%' )
+AND lk.ten_loai_khach_hang = 'Diamond';
+
+
+-- 13.	Hiển thị thông tin các Dịch vụ đi kèm được sử dụng nhiều nhất
+-- bởi các Khách hàng đã đặt phòng.
+-- (Lưu ý là có thể có nhiều dịch vụ có số lần sử dụng nhiều như nhau).
+-- dvdk.ma_dich_vu_di_kem	,
+--   dvdk.ten_dich_vu_di_kem
+select 
+dvdk.ma_dich_vu_di_kem	,
+  dvdk.ten_dich_vu_di_kem
+   ,max(hdct.so_luong) as 'max'
+from dich_vu dv
+left join hop_dong hd 
+on dv.ma_dich_vu= hd.ma_dich_vu 
+left join hop_dong_chi_tiet hdct
+on hd.ma_hop_dong= hdct.ma_hop_dong
+left join dich_vu_di_kem dvdk
+on hdct.ma_dich_vu_di_kem =dvdk.ma_dich_vu_di_kem
+group by dvdk.ma_dich_vu_di_kem
+order by max desc;
 
 
 
+-- 15.	Hiển thi thông tin của tất cả nhân viên bao gồm ma_nhan_vien,
+-- ho_ten, ten_trinh_do, ten_bo_phan, so_dien_thoai, dia_chi mới chỉ lập
+-- được tối đa 3 hợp đồng từ năm 2020 đến 2021.
+
+-- where  ma_hop_dong<3 and year(ngay_lam_hop_dong) between 2010 and 2021 
+select 
+*,
+ count(nv.ma_nhan_vien) as abc
+from nhan_vien nv 
+left join hop_dong hd 
+on nv.ma_nhan_vien= hd.ma_nhan_vien
+where  abc<3 and year(ngay_lam_hop_dong) between 2010 and 2021 
+group by hd.ma_hop_dong
 
 
 
