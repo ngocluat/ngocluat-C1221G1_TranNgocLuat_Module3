@@ -102,7 +102,7 @@ end //
 
 
 DELIMITER //
-CREATE PROCEDURE updateProduct(in p_id int, p_code varchar(45), p_price double,
+CREATE PROCEDURE update_product(in p_id int, p_code varchar(45), p_price double,
                                p_name varchar(45), p_amount int,
                                p_description varchar(100), status bit)
 BEGIN

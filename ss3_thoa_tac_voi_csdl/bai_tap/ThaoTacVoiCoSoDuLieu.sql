@@ -33,22 +33,22 @@ foreign key (p_id) references product(p_id)
 
 
 insert into customer(c_name,c_age) 
-value("Minh Quan",10),
-("Ngoc Oanh",10),
-("Hong Ha",10);
+value('Minh Quan',10),
+('Ngoc Oanh',10),
+('Hong Ha',10);
 
 insert into oder(c_id,o_date)
-value (1,"2022-10-10"),
- (1,"2023-9-20"),
- (2,"2022-10-11");
+value (1,'2022-10-10'),
+ (1,'2023-9-20'),
+ (2,'2022-10-11');
  
  
  insert into product(p_name ,price ) value 
- ("May Giat",3),
- ("Tu Lanh",5),
- ("Quat",7),
- ("Dieu Hoa",2),
- ("	Bep Dien",1);
+ ('May Giat',3),
+ ('Tu Lanh',5),
+ ('Quat',7),
+ ('Dieu Hoa',2),
+ ('	Bep Dien',1);
  
  insert into oder_detail(o_id,p_id,od_qty) value
  (1,1,2),
@@ -75,7 +75,7 @@ select c.c_name,count(o.c_id) as buy_count from oder o right join customer c on 
  
  -- Hiển thị mã hóa đơn, ngày bán và giá tiền của từng hóa đơn (giá một hóa đơn được tính bằng tổng
  -- giá bán của từng loại mặt hàng xuất hiện trong hóa đơn. Giá bán của từng loại được tính = odQTY*pPrice)
- select  o.o_id , o_date, sum(od_qty * p.price) as " giá tiền"  from oder o
+ select  o.o_id , o_date, sum(od_qty * p.price) as gia_tien from oder o
  join oder_detail od on o.o_id=od.o_id 
  join product p on o.o_id= p.p_id
  group by o_id 
