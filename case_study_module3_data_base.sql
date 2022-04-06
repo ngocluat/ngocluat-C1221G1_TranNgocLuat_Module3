@@ -399,7 +399,7 @@ having count(hd.ma_hop_dong) = 0;
 set sql_safe_updates = 0;
 delete from nhan_vien where ma_nhan_vien in 
 (
-select * from  w_xoa_nhan_vien
+select ma_nhan_vien from  w_xoa_nhan_vien
 );
 	set sql_safe_updates = 1;
     
@@ -447,13 +447,28 @@ left join hop_dong hd on kh.ma_khach_hang = hd.ma_khach_hang
 where year(ngay_lam_hop_dong)< 2021;
 
 set sql_safe_updates =0;
-set foreign_key_check = 0;
-delete from khach_hang where ma_khach_hang in
-(
- select ma_khach_hang from  xoa_khach_hang_co_hop_dong_truoc_2021
-);
-set foreign_key_check = 1;
+SET FOREIGN_KEY_CHECKS = 0;
+  delete from khach_hang kh
+where  kh.ma_khach_hang
+ in (select ma_khach_hang from (
+	select distinct khach_hang.ma_khach_hang 
+ from khach_hang
+	inner join hop_dong on khach_hang.ma_khach_hang = hop_dong.ma_khach_hang
+ where year(hop_dong.ngay_lam_hop_dong) < 2021 ) 
+ as khac_hang_co_hd);
+set foreign_key_checks = 1;
 set sql_safe_updates =1;
+
+
+  -- delete from khach_hang where ma_khach_hang in
+-- (
+-- select kh.ma_khach_hang from khach_hang  kh
+--  left join hop_dong hd
+-- 	on kh.ma_khach_hang = hd.ma_khach_hang
+-- where year(ngay_lam_hop_dong)< 2021
+-- );
+-- set foreign_key_checks = 1;
+-- set sql_safe_updates =1
 
 -- 19.	Cập nhật giá cho các dịch vụ đi kèm được sử dụng trên 10 lần trong năm 2020 lên gấp đôi
 create view cap_nhap_gia as 
@@ -500,6 +515,48 @@ drop procedure lay_tat_ca_thong_tin;
 -- 21.	Tạo khung nhìn có tên là v_nhan_vien để lấy được thông tin của tất cả các nhân viên
 --  có địa chỉ là “Hải Châu” và đã từng lập hợp đồng cho một hoặc nhiều khách hàng bất
 -- kì với ngày lập hợp đồng là “12/12/2019”.
+
+	create  view v_nhan_vien as
+select nv.ma_nhan_vien,nv.ho_ten,nv.dia_chi,nv.email from nhan_vien nv 
+ join hop_dong hd 
+	on nv.ma_nhan_vien = hd.ma_nhan_vien 
+ where (nv.dia_chi like '%Hải Châu' )
+and date(hd.ngay_lam_hop_dong) = '2019-12-12'; 
+
+select * from v_nhan_vien;
+-- 22.	Thông qua khung nhìn v_nhan_vien thực hiện cập nhật địa chỉ thành 
+-- “Liên Chiểu” đối với tất cả các nhân viên được nhìn thấy bởi khung nhìn này.
+
+set sql_safe_updates= 0 ;
+update nhan_vien, (select distinct dia_chi from v_nhan_vien) as select_dia_chi
+ set nhan_vien.dia_chi = 'Cẩm Lệ' 
+where nhan_vien.dia_chi = select_dia_chi.dia_chi;
+set sql_safe_updates= 1;
+
+
+-- 23.	Tạo Stored Procedure sp_xoa_khach_hang dùng để xóa thông tin của một khách hàng \
+-- nào đó với ma_khach_hang được truyền vào như là 1 tham số của sp_xoa_khach_hang.
+
+delimiter // 
+create procedure sp_xoa_khach_hang (in ma_khach_hang_delete  int )
+begin 
+set sql_safe_updates= 0;
+delete from khach_hang where  ma_khach_hang_delete =  ma_khach_hang;
+set sql_safe_updates= 1;
+end//
+
+delimiter ;
+
+
+call sp_xoa_khach_hang(11);
+
+drop procedure sp_xoa_khach_hang;
+INSERT INTO case_study_database.khach_hang (ma_loai_khach, ho_ten, ngay_sinh, gioi_tinh, so_cmnd, so_dien_thoai, email, dia_chi) VALUES ('2', 'A', '1989-07-01', 0, '11111111', '1111111111', '1', '1');
+
+-- 24.	Tạo Stored Procedure sp_them_moi_hop_dong dùng để thêm mới vào bảng hop_dong với yêu
+--  cầu sp_them_moi_hop_dong phải thực hiện kiểm tra tính hợp lệ của dữ liệu bổ sung, với 
+-- nguyên tắc không được trùng khóa chính và đảm bảo toàn vẹn tham chiếu đến các bảng liên quan.
+
 
 
 
