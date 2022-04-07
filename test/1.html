@@ -1,0 +1,106 @@
+<!DOCTYPE html><!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Thiết kế Layout - Bố cục website trong CSS</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+
+        }
+
+        /* Định dạng header */
+        .header {
+            background-color: #e9d8f4;
+            color: #58257b;
+            padding: 10px;
+            text-align: center;
+        }
+
+        /* Định dạng thanh điều hướng trên cùng */
+        .topnav {
+            overflow: hidden;
+            background-color: #58257b;
+        }
+
+        /* Định dạng link điều hướng */
+        .topnav a {
+            float: left;
+            display: block;
+            color: #f2f2f2;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+        }
+
+        /* Thay đổi màu liên kết khi di chuột qua */
+        .topnav a:hover {
+            background-color: #db7093;
+            color: white;
+            font-weight: bold
+        }
+
+        /* Tạo ba cột bằng nhau, float cạnh nhau */
+        .column {
+            float: left;
+            width: 33.33%;
+            padding: 15px;
+        }
+
+        /* Clear float khác sau các cột */
+        .row:after {
+            content: "";
+            display: table;
+            clear: both;
+        }
+
+        /* Bố cục linh hoạt: ba cột xếp chồng lên nhau thay vì cạnh nhau khi màn hình
+        có chiều rộng dưới 600px */
+        @media screen and (max-width:600px) {
+            .column {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <h1>Website Quản Trị Mạng</h1>
+</div>
+
+<div class="topnav">
+    <a href="#">Làng Công nghệ</a>
+    <a href="#">Công nghệ</a>
+    <a href="#">Cuộc sống</a>
+</div>
+
+<div class="row">
+    <div class="column">
+        <h2>Làng Công nghệ</h2>
+        <p>Cập nhật những xu hướng, khám phá, nghiên cứu mới nhất về khoa học
+            công nghệ.</p>
+    </div>
+
+    <div class="column">
+        <h2>Công nghệ</h2>
+        <p>bao gồm thủ thuật, hướng dẫn sử dụng phần mềm, phần cứng, sửa lỗi
+            mạng, sửa lỗi máy tính trên nhiều hệ điều hành như Windows, macOS, Linux,
+            Android, iOS...</p>
+    </div>
+
+    <div class="column">
+        <h2>Cuộc sống</h2>
+        <p>Kỹ năng sống, kỹ năng công việc, kỹ năng lãnh đạo, mẹo vặt cuộc sống,
+            những điều có thể bạn chưa biết, những câu nói hay về cuộc sống, câu nói
+            nổi tiếng của Jack Ma, Bill Gate, Steve Jobs...</p>
+    </div>
+</div>
+
+</body>
+</html>
