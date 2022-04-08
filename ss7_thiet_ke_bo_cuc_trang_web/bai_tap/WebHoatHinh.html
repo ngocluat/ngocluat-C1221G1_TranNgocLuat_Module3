@@ -57,14 +57,19 @@
             box-sizing: border-box;
         }
 
+        [class*=col-] {
+            float: left;
+            padding-right: 5px;
+        }
+
         @media screen and (max-width: 1080px) {
-            [class*=video] {
+            [class*= col-] {
                 width: 50%;
             }
         }
 
         @media screen and (max-width: 500px) {
-            [class*= video] {
+            [class*= col-] {
                 width: 100%;
             }
         }
@@ -128,7 +133,21 @@
         }
 
         h4 {
-            margin-top: 0px;
+            margin-top: 0;
+        }
+
+
+
+        @media screen and (max-width: 992px){
+            [class*= video] {
+                width: 50%;
+            }
+        }
+
+        @media screen and (max-width: 1200px){
+            [class*=video] {
+                width: 100%;
+            }
         }
     </style>
 </head>
