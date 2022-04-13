@@ -6,7 +6,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-@WebServlet(name = "TinhChiecKhauServlet" ,urlPatterns = "/Percent")
+@WebServlet(name = "TinhChiecKhauServlet" ,urlPatterns = "/percent")
 public class TinhChiecKhauServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("utf-8");
@@ -17,7 +17,7 @@ public class TinhChiecKhauServlet extends HttpServlet {
         double afterdiscount= price-result;
         request.setAttribute("ketQua", result);
         request.setAttribute("ketQua1", afterdiscount);
-        request.getRequestDispatcher("/TinhChiecKhau.jsp").forward(request, response);
+        request.getRequestDispatcher("/tinh_chiec_khau.jsp").forward(request, response);
 
     }
 

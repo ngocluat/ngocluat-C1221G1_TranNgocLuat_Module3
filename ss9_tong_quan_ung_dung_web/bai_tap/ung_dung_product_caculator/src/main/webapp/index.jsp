@@ -12,7 +12,7 @@
     <title>$Title$</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
   <style>
-    .tuyChinh{
+    .tuy-chinh{
       width: 50%;
       height: 50%;
       border: black;
@@ -22,8 +22,8 @@
 
 </head>
 <body>
-<div class="tuyChinh">
-<form method="post" action="Percent">
+<div class="tuy-chinh">
+<form method="post" action="percent">
   <div class="input-group mb-3">
     <div class="input-group-prepend">
       <span class="input-group-text">productDescription</span>
