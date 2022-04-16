@@ -101,9 +101,23 @@ public class ProductServlet extends HttpServlet {
             case "delete":
                 showDleteForm(request, response);
                 break;
+            case "search":
+               search(request, response);
+                break;
             default:
                 viewCustomer(request, response);
                 break;
+        }
+    }
+
+    private void search(HttpServletRequest request, HttpServletResponse response) {
+        String name  = request.getParameter("name");
+        Product product = produceServiceimp.seach(name);
+        request.setAttribute("products", product);
+        try {
+            request.getRequestDispatcher("tim.jsp").forward(request,response);
+        } catch (ServletException | IOException e) {
+            e.printStackTrace();
         }
     }
 

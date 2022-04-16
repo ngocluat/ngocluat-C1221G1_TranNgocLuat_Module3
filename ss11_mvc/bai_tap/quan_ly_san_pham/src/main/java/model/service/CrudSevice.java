@@ -16,4 +16,5 @@ public interface CrudSevice {
     Product findById(int id);
 
     void update(int id, Product product);
+    Product seach(String name);
 }

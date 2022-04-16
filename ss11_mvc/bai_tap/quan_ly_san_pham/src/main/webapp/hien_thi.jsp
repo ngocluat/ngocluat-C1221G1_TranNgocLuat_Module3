@@ -19,7 +19,8 @@
     <h1>Product</h1>
     <button type="button" class="btn btn-success"><a href="/product?action=create">Create new customer</a></button>
 
-
+    <input type="text"  placeholder="tìm tên sản phẩm">
+    <button type="submit"><a href="/product?action=search"> tìm </a> </button>
     <table border="1" class="table table-striped">
         <tr>
             <th scope="col">Tên sản phẩm</th>

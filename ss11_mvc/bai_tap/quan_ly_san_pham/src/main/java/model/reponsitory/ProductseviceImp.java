@@ -45,4 +45,9 @@ public class ProductseviceImp implements CrudSevice {
     public void update(int id, Product product) {
         productMap.put(id, product);
     }
+
+    @Override
+    public Product seach(String name) {
+        return productMap.get(name);
+    }
 }
