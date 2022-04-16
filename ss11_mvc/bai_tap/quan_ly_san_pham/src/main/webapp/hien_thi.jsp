@@ -15,28 +15,32 @@
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 </head>
 <body>
+<div class="container">
+    <h1>Product</h1>
+    <button type="button" class="btn btn-success"><a href="/product?action=create">Create new customer</a></button>
 
-<h1>Customers</h1>
-<p>
-    <a href="/product?action=hien-thi">Create new customer</a>
-</p>
-<table border="1" class="table table-striped">
-    <tr>
-        <th scope="col">Tên sản phẩm</th>
-        <th scope="col">mô tả</th>
-        <th scope="col">giá</th>
-        <th scope="col">Edit</th>
-        <th scope="col">Delete</th>
-    </tr>
-    <c:forEach var="item" items="${product}">
-    <tr>
-        <td>${item.id},${item.tenSanPham}</td>
-        <td>${item.mota}</td>
-        <td>${item.gia}</td>
-        <td>${item.getId()}>edit</td>
-        <td>${item.getId()}>delete</td>
-    </tr>
-    </c:forEach>
 
+    <table border="1" class="table table-striped">
+        <tr>
+            <th scope="col">Tên sản phẩm</th>
+            <th scope="col">mô tả</th>
+            <th scope="col">giá</th>
+            <th scope="col">Edit</th>
+            <th scope="col">Delete</th>
+        </tr>
+        <c:forEach var="item" items="${product}">
+        <tr>
+            <td>${item.id},${item.tenSanPham}</td>
+            <td>${item.moTa}</td>
+            <td>${item.gia}</td>
+            <td>
+            <button type="button" class="btn btn-outline-secondary"><a href="product?action=update&id=${item.getId()}">Edit</a></button>
+            </td>
+            <td>
+                <button type="button" class="btn btn-outline-danger"><a href="product?action=delete&id=${item.getId()}">Delete</a></button>
+            </td>
+        </tr>
+        </c:forEach>
+</div>
 </body>
 </html>
