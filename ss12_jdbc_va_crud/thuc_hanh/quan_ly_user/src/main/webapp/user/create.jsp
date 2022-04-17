@@ -49,6 +49,9 @@
                 </td>
             </tr>
         </table>
+        <c:if test="${message!= null}">
+            <p>${message}</p>
+        </c:if>
     </form>
 </div>
 </body>

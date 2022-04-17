@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%--
   Created by IntelliJ IDEA.
   User: Administrator
@@ -58,6 +59,9 @@
                 </td>
             </tr>
         </table>
+        <c:if test="${message != null}">
+            ${message}
+        </c:if>
     </form>
 </div>
 </body>

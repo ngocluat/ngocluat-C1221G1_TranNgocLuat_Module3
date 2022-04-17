@@ -15,12 +15,27 @@
           integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
 </head>
 <body>
+<script>
+    function myFunction() {
+        confirm("Press a button!");
+    }
+</script>
+
 <center>
     <h1>User Management</h1>
     <h2>
         <a href="/users?action=create">Add New User</a>
     </h2>
 </center>
+
+<div >
+ <label> tìm kiếm   </label>
+    <form action="/">
+        <input type="hidden" name="action" value="search">
+        <input type="text" name="name">
+        <button type="submit">tìm tên user</button>
+    </form>
+</div>
 <div align="center">
     <table border="1" cellpadding="5">
         <caption><h2>List of Users</h2></caption>
@@ -29,7 +44,7 @@
             <th>Name</th>
             <th>Email</th>
             <th>Country</th>
-            <th>Actions</th>
+            <th colspan="2">Actions</th>
         </tr>
         <c:forEach var="user" items="${listUser}">
             <tr>
@@ -39,17 +54,28 @@
                 <td><c:out value="${user.country}"/></td>
                 <td>
                     <a href="/users?action=edit&id=${user.id}">Edit</a>
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal"><a
-                            href="#">Xóa</a></button>
+                </td>
+                <td>
+                        <%--<a onclick= "return confirm('Are you sure?')" href="/users?action=delete&id=${user.id}">delete</a>--%>
+                    <button type="button" class="btn btn-primary" data-toggle="modal"
+                            data-target="#exampleModal"
+                            onclick="deleteUser(
+                                ${user.id},
+                                <c:out value="\'${user.name}\'"/>)"
+                    >
+                        xóa
+                    </button>
                 </td>
             </tr>
         </c:forEach>
     </table>
+    <h4>  <a href="/users">Quay Lại </a></h4>
 </div>
 
 <!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
@@ -57,15 +83,19 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body">
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">
-                    <a href="users?action=delete&id=${user.id}">
-                        xóa</a>
-                </button>
-            </div>
+            <form action="/" method="post">
+                <div class="modal-body">
+                    <input type="hidden" name="id" id="idDelete">
+                    <input type="hidden" name="action" value="delete">
+                    <p>Bạn có chắc muốn xóa <span id="nameDelete"></span></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Xóa</button>
+
+
+                </div>
+            </form>
         </div>
     </div>
 </div>
@@ -80,3 +110,10 @@
         crossorigin="anonymous"></script>
 </body>
 </html>
+<script>
+    function deleteUser(id, name) {
+        // gán vào modal
+        document.getElementById("idDelete").value = id;
+        document.getElementById("nameDelete").innerHTML = name;
+    }
+</script>
