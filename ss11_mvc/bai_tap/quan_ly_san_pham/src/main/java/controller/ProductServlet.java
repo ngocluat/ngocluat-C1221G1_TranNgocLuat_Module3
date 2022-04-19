@@ -37,7 +37,32 @@ public class ProductServlet extends HttpServlet {
 
         }
     }
-
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.setCharacterEncoding("utf-8");
+        response.setContentType("text/html;charset=UTF-8");
+        String action = request.getParameter("action");
+        if (action == null) {
+            action = "";
+        }
+        System.out.println(action);
+        switch (action) {
+            case "create":
+                showCreateForm(request, response);
+                break;
+            case "update":
+                showUpdateProduct(request, response);
+                break;
+            case "delete":
+                showDleteForm(request, response);
+                break;
+            case "search":
+                search(request, response);
+                break;
+            default:
+                viewCustomer(request, response);
+                break;
+        }
+    }
     private void deleteProduct(HttpServletRequest request, HttpServletResponse response) {
         int id = Integer.parseInt(request.getParameter("id"));
         Product customer = this.produceServiceimp.findById(id);
@@ -83,32 +108,7 @@ public class ProductServlet extends HttpServlet {
 
     }
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.setCharacterEncoding("utf-8");
-        response.setContentType("text/html;charset=UTF-8");
-        String action = request.getParameter("action");
-        if (action == null) {
-            action = "";
-        }
-        System.out.println(action);
-        switch (action) {
-            case "create":
-                showCreateForm(request, response);
-                break;
-            case "update":
-                showUpdateProduct(request, response);
-                break;
-            case "delete":
-                showDleteForm(request, response);
-                break;
-            case "search":
-               search(request, response);
-                break;
-            default:
-                viewCustomer(request, response);
-                break;
-        }
-    }
+
 
     private void search(HttpServletRequest request, HttpServletResponse response) {
         String name  = request.getParameter("name");
@@ -145,6 +145,7 @@ public class ProductServlet extends HttpServlet {
             e.printStackTrace();
         }
     }
+
 
     private void showCreateForm(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.getRequestDispatcher("them_moi.jsp").forward(request, response);

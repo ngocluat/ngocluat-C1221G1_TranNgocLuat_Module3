@@ -1,6 +1,8 @@
 package controller;
 
 import model.model.User;
+import reponsitory.reponsitoryy.IUserDAO;
+import reponsitory.reponsitoryy.impl.UserDAO;
 import service.ICRUDUserService;
 import service.impl.UserServiceIpml;
 
@@ -19,6 +21,7 @@ public class UserServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
    private ICRUDUserService icrudReponsitoty ;
+
     public void init() {
         icrudReponsitoty = new UserServiceIpml();
     }
@@ -115,7 +118,7 @@ public class UserServlet extends HttpServlet {
     private void showDeleteUser(HttpServletRequest request, HttpServletResponse response) {
         int id = Integer.parseInt(request.getParameter("id"));
         try {
-            icrudReponsitoty.deleteUserSv(id);
+            icrudReponsitoty.deleteUser(id);
             response.sendRedirect("/users");
         } catch (Exception e) {
             e.printStackTrace();
@@ -125,7 +128,7 @@ public class UserServlet extends HttpServlet {
 
     private void listUser(HttpServletRequest request, HttpServletResponse response)
             throws SQLException, IOException, ServletException {
-        List<User> listUser = icrudReponsitoty.selectAllUsersSv();
+        List<User> listUser = icrudReponsitoty.getAllUser();
         request.setAttribute("listUser", listUser);
         RequestDispatcher dispatcher = request.getRequestDispatcher("user/list.jsp");
         dispatcher.forward(request, response);

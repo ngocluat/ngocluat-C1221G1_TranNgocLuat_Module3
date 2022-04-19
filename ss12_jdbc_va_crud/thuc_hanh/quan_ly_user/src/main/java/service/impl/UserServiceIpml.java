@@ -27,7 +27,7 @@ public class UserServiceIpml  implements ICRUDUserService {
 
     @Override
     public List<User> selectAllUsersSv() {
-        return iUserDAO.selectAllUsers();
+        return iUserDAO.getAllUser();
     }
 
     @Override
@@ -51,6 +51,16 @@ public class UserServiceIpml  implements ICRUDUserService {
     @Override
     public List<User> seachSv(String user) {
         return iUserDAO.seach(user);
+    }
+
+    @Override
+    public List<User> getAllUser() {
+        return iUserDAO.getAllUser();
+    }
+
+    @Override
+    public void deleteUser(int user) throws SQLException {
+        iUserDAO.deleteUser(user);
     }
 
 //    IUserDAO iUserDAO = new UserDAO();

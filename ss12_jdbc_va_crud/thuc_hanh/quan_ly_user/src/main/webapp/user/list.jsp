@@ -36,8 +36,13 @@
         <button type="submit">tìm tên user</button>
     </form>
 </div>
+<div>
+<%-- --%>
+
+</div>
 <div align="center">
     <table border="1" cellpadding="5">
+   <p>dánh sách đã sắp xếp theo tên </p>
         <caption><h2>List of Users</h2></caption>
         <tr>
             <th>ID</th>
@@ -56,7 +61,7 @@
                     <a href="/users?action=edit&id=${user.id}">Edit</a>
                 </td>
                 <td>
-                        <%--<a onclick= "return confirm('Are you sure?')" href="/users?action=delete&id=${user.id}">delete</a>--%>
+   <%--<a onclick= "return confirm('Are you sure?')" href="/users?action=delete&id=${user.id}">delete</a>--%>
                     <button type="button" class="btn btn-primary" data-toggle="modal"
                             data-target="#exampleModal"
                             onclick="deleteUser(
@@ -69,7 +74,8 @@
             </tr>
         </c:forEach>
     </table>
-    <h4>  <a href="/users">Quay Lại </a></h4>
+    <h4><a href="/users">Quay Lại
+    </a></h4>
 </div>
 
 <!-- Modal -->

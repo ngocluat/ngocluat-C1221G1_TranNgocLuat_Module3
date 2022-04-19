@@ -2,6 +2,7 @@ package reponsitory.reponsitoryy.impl;
 
 import model.model.User;
 import reponsitory.reponsitoryy.IUserDAO;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,9 +14,9 @@ public class UserDAO implements IUserDAO {
 
     private static final String INSERT_USERS_SQL = "INSERT INTO users" + "  (`name`, email, country) VALUES " + " (?, ?, ?)";
     private static final String SELECT_USER_BY_ID = "select id,`name`,email,country from users where id =?";
-    private static final String SELECT_ALL_USERS = "select * from users";
-    private static final String DELETE_USERS_SQL = "delete from users where id = ?;";
-    private static final String UPDATE_USERS_SQL = "update users set name = ?,email= ?, country =? where id = ?;";
+    private static final String SELECT_ALL_USERS = "SELECT * FROM users order by `name` asc  ;";
+//    private static final String DELETE_USERS_SQL = "delete from users where id = ?;";
+//    private static final String UPDATE_USERS_SQL = "update users set name = ?,email= ?, country =? where id = ?;";
 
 
     public UserDAO() {
@@ -84,25 +85,51 @@ public class UserDAO implements IUserDAO {
     }
 
     public boolean deleteUser(int id) throws SQLException {
-        boolean rowDeleted;
-        try (Connection connection = getConnection();
-             PreparedStatement statement = connection.prepareStatement(DELETE_USERS_SQL)) {
-            statement.setInt(1, id);
-            rowDeleted = statement.executeUpdate() > 0;
+
+        boolean rowDeleted = false;
+        PreparedStatement preparedStatement = null;
+        try {
+            CallableStatement callableStatement = getConnection().prepareCall("call delete_user(?)");
+            callableStatement.setInt(1, id);
+            rowDeleted = callableStatement.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                assert preparedStatement != null;
+                preparedStatement.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
         return rowDeleted;
+
     }
 
     public boolean updateUser(User user) throws SQLException {
-        boolean rowUpdated;
-        try (Connection connection = getConnection();
-             PreparedStatement statement = connection.prepareStatement(UPDATE_USERS_SQL)) {
-            statement.setString(1, user.getName());
-            statement.setString(2, user.getEmail());
-            statement.setString(3, user.getCountry());
-            statement.setInt(4, user.getId());
-            rowUpdated = statement.executeUpdate() > 0;
+        boolean rowUpdated = false;
+//        try (Connection connection = getConnection();
+//             PreparedStatement statement = connection.prepareStatement(UPDATE_USERS_SQL)) {
+//            statement.setString(1, user.getName());
+//            statement.setString(2, user.getEmail());
+//            statement.setString(3, user.getCountry());
+//            statement.setInt(4, user.getId());
+//            rowUpdated = statement.executeUpdate() > 0;
+//        }
+//        return rowUpdated;
+
+        CallableStatement callableStatement = null;
+        try {
+            callableStatement = getConnection().prepareCall("call edit_user(?,?,?,?)");
+            callableStatement.setInt(1, user.getId());
+            callableStatement.setString(2, user.getName());
+            callableStatement.setString(3, user.getEmail());
+            callableStatement.setString(4, user.getCountry());
+            rowUpdated = callableStatement.executeUpdate() > 0;
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
         }
+
         return rowUpdated;
     }
 
@@ -136,6 +163,57 @@ public class UserDAO implements IUserDAO {
         }
         return userList;
     }
+
+    @Override
+
+    public List<User> getAllUser() {
+        List<User> userList = new ArrayList<>();
+        CallableStatement callableStatement = null;
+        try {
+            callableStatement = getConnection().prepareCall("call get_all_user");
+            ResultSet resultSet = callableStatement.executeQuery();
+            User user;
+            while (resultSet.next()) {
+                user = new User();
+                user.setId(resultSet.getInt("id"));
+                user.setName(resultSet.getString("name"));
+                user.setEmail(resultSet.getString("email"));
+                user.setCountry(resultSet.getString("country"));
+                userList.add(user);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                callableStatement.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return userList;
+    }
+
+
+    @Override
+
+    public void insertUserStore(User user) throws SQLException {
+
+        try (Connection connection = getConnection();
+             CallableStatement callableStatement = connection.prepareCall("CALL insert_user(?,?,?)");) {
+            callableStatement.setString(1, user.getName());
+            callableStatement.setString(2, user.getEmail());
+            callableStatement.setString(3, user.getCountry());
+            System.out.println(callableStatement);
+            callableStatement.executeUpdate();
+        } catch (SQLException e) {
+
+            e.printStackTrace();
+
+        }
+
+    }
+
+
 //    private void printSQLException(SQLException ex) {
 //        for (Throwable e : ex) {
 //            if (e instanceof SQLException) {

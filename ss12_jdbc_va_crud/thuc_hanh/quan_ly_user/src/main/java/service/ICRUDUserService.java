@@ -2,6 +2,7 @@ package service;
 
 import model.model.User;
 
+import java.sql.SQLException;
 import java.util.List;
 
 public interface ICRUDUserService {
@@ -17,4 +18,7 @@ public interface ICRUDUserService {
     void updateUserSv(User user);
 
     List<User> seachSv (String  user);
+    List<User> getAllUser();
+
+    void deleteUser(int user) throws SQLException;
 }

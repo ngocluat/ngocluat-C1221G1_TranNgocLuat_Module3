@@ -20,5 +20,9 @@ public interface IUserDAO {
 
      boolean updateUser(User user) throws SQLException;
 
-     List<User> seach (String  user);
+     List<User> seach(String user);
+
+     List<User> getAllUser();
+
+     void insertUserStore(User user) throws SQLException;
 }
