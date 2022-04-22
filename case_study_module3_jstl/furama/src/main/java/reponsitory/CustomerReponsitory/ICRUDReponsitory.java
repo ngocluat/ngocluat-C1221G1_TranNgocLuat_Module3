@@ -1,6 +1,7 @@
 package reponsitory.CustomerReponsitory;
 
 import model.Customer;
+import model.CustomerType;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -8,7 +9,7 @@ import java.util.List;
 public interface ICRUDReponsitory {
     void insertCustomer(Customer customer);
 
-    List<Customer> searchCustomer(String id);
+    List<Customer> searchCustomer(String id , String diaChi, String email);
 
     List<Customer> selectAllCustomer();
 
@@ -17,7 +18,6 @@ public interface ICRUDReponsitory {
 
     void updateCustomer(Customer customer);
 
-    Customer getCusstomer(String ma_khach_hang);
-
+    Customer getCusstomer(int ma_khach_hang);
 
 }

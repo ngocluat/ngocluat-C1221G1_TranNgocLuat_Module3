@@ -1,8 +1,11 @@
 package controller;
 
 import model.Customer;
+import model.CustomerType;
+import reponsitory.CustomerReponsitory.CustomerReponsitoryImpl;
 import service.customer.CustomerServiceImpl;
 import service.customer.ICRUDCustomer;
+import service.cusumer_type_reponsitory.CustomertypeService;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -12,12 +15,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 @WebServlet(name = "CustomerServlet", urlPatterns = "/customer")
 public class CustomerServlet extends HttpServlet {
+    CustomerReponsitoryImpl customerReponsitory = new CustomerReponsitoryImpl();
     ICRUDCustomer icrudCustomer = new CustomerServiceImpl();
-
-
+    CustomertypeService customertypeService = new CustomertypeService();
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
         request.setCharacterEncoding("utf-8");
@@ -26,7 +30,6 @@ public class CustomerServlet extends HttpServlet {
         if (action == null) {
             action = "";
         }
-
         switch (action) {
             case "create":
                 createCustomer(request, response);
@@ -66,39 +69,51 @@ public class CustomerServlet extends HttpServlet {
     }
 
     private void showCreateCustomer(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-        request.getRequestDispatcher("customer_file/create-customer.jsp").forward(request, response);
+        List<CustomerType> customerListType = customertypeService.selectCustomerType();
+        request.setAttribute("customerTypeLists", customerListType);
+        request.getRequestDispatcher("view/customer/create.jsp").forward(request, response);
 
     }
 
     private void listCustomer(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         List<Customer> customerList = icrudCustomer.selectAllCustomer();
         request.setAttribute("customerLists", customerList);
-        RequestDispatcher dispatcher = request.getRequestDispatcher("customer_file/list-customer.jsp");
+        List<CustomerType> customerListType = customertypeService.selectCustomerType();
+        request.setAttribute("customerTypeLists", customerListType);
+        RequestDispatcher dispatcher = request.getRequestDispatcher("view/customer/list.jsp");
         dispatcher.forward(request, response);
     }
 
     private void searchingCustomer(HttpServletRequest request, HttpServletResponse response) {
         String name = request.getParameter("name");
-        List<Customer> customerList = icrudCustomer.seachCustomerSv(name);
+        String diaChi = request.getParameter("diaChi");
+        String mail = request.getParameter("mail");
+        List<Customer> customerList = icrudCustomer.seachCustomerSv(name, diaChi, mail);
         System.out.println(customerList);
         request.setAttribute("customerLists", customerList);
         try {
-            request.getRequestDispatcher("/customer_file/list-customer.jsp").forward(request, response);
+            request.getRequestDispatcher("view/customer/list.jsp").forward(request, response);
         } catch (ServletException | IOException e) {
             e.printStackTrace();
         }
     }
 
+
     private void showEditCustomer(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String maKhachHang = request.getParameter("ma_khach_hang");
-        Customer customer = icrudCustomer.getCusstomer(maKhachHang);
+        List<CustomerType> customerListType = customertypeService.selectCustomerType(); //
+        request.setAttribute("customerTypeLists", customerListType);//
+
+        int idMaKhachHang = Integer.parseInt(request.getParameter("id_ma_khach_hang"));
+        request.setAttribute("idMaKhachHang", idMaKhachHang);
+        Customer customer = icrudCustomer.getCusstomer(idMaKhachHang);
         request.setAttribute("customers", customer);
-        RequestDispatcher dispatcher = request.getRequestDispatcher("customer_file/edit-customer.jsp");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("view/customer/edit.jsp");
         dispatcher.forward(request, response);
     }
 
     private void createCustomer(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+        int idMaKhachHang = Integer.parseInt(request.getParameter("idMaKhachHang"));
         String name = request.getParameter("name");
         String ngaySinh = request.getParameter("ngaySinh");
         int gioiTinh = Integer.parseInt(request.getParameter("gioiTinh"));
@@ -108,9 +123,23 @@ public class CustomerServlet extends HttpServlet {
         String maKhachHang = request.getParameter("maKhachHang");
         int loaiKhachHang = Integer.parseInt(request.getParameter("loaiKhachHang"));
         String diaChi = request.getParameter("diaChi");
-        icrudCustomer.insertCustomer(new Customer(name, ngaySinh, gioiTinh, soCMND, email, soDienThoai, maKhachHang, loaiKhachHang, diaChi));
-        request.setAttribute("message", "đã thêm mới thành công");
-        request.getRequestDispatcher("customer_file/create-customer.jsp").forward(request, response);
+        Map<String, String> stringStringMap = icrudCustomer.insertCustomer(new Customer(name, ngaySinh, gioiTinh, soCMND, email, idMaKhachHang, soDienThoai, maKhachHang, loaiKhachHang, diaChi));
+        if (stringStringMap.isEmpty()) {
+            request.setAttribute("message", "đã thêm mới thành công");
+            request.setAttribute("check", stringStringMap);
+            request.getRequestDispatcher("view/customer/create.jsp").forward(request, response);
+            List<CustomerType> customerListType = customertypeService.selectCustomerType();
+            request.setAttribute("customerTypeLists", customerListType);
+        } else {
+            request.setAttribute("error", stringStringMap);
+            request.getRequestDispatcher("view/customer/create.jsp").forward(request, response);
+
+            List<CustomerType> customerListType = customertypeService.selectCustomerType();
+            request.setAttribute("customerTypeLists", customerListType);
+
+        }
+
+
     }
 
 
@@ -126,7 +155,7 @@ public class CustomerServlet extends HttpServlet {
 
     private void updateCustomer(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
+        int idMaKhachHang = Integer.parseInt(request.getParameter("id_ma_khach_hang"));
         String ho_ten = request.getParameter("ho_ten");
         String ngay_sinh = request.getParameter("ngay_sinh");
         int gioi_tinh = Integer.parseInt(request.getParameter("gioi_tinh"));
@@ -136,11 +165,11 @@ public class CustomerServlet extends HttpServlet {
         String ma_khach_hang = request.getParameter("ma_khach_hang");
         int ma_loai_khach = Integer.parseInt(request.getParameter("ma_loai_khach"));
         String dia_chi = request.getParameter("dia_chi");
-        Customer customer = new Customer(ho_ten, ngay_sinh, gioi_tinh, so_cmnd, email, so_dien_thoai, ma_khach_hang, ma_loai_khach, dia_chi);
+        Customer customer = new Customer(ho_ten, ngay_sinh, gioi_tinh, so_cmnd, email, idMaKhachHang, so_dien_thoai, ma_khach_hang, ma_loai_khach, dia_chi);
+        System.out.println(customer);
         icrudCustomer.updateCustomer(customer);
-        request.setAttribute("message", "update success  ");
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/customer");
-        dispatcher.forward(request, response);
+        request.setAttribute("message", "update success");
+        response.sendRedirect("/customer");
     }
 
 

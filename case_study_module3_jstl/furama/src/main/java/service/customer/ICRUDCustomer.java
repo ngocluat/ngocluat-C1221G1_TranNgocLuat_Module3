@@ -4,11 +4,12 @@ import model.Customer;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 
 public interface ICRUDCustomer {
-    void insertCustomer(Customer customer);
+    Map<String, String> insertCustomer(Customer customer);
 
-    List<Customer> selectCustomer(String id);
+
 
     List<Customer> selectAllCustomer();
 
@@ -16,7 +17,11 @@ public interface ICRUDCustomer {
 
     void updateCustomer(Customer customer);
 
-    List<Customer> seachCustomerSv(String user);
+    Customer getCusstomer(int id);
 
-    Customer getCusstomer(String id);
+
+    List<Customer> seachCustomerSv(String name, String diaChi , String mail);
+
+
+
 }
