@@ -142,7 +142,6 @@ public class EmployeeServlet extends HttpServlet {
 
     }
 
-
     private void searchingEmployee(HttpServletRequest request, HttpServletResponse response) {
         List<TrinhDo> trinhDos = trinhDoService.selectAllTrinhDo();
         request.setAttribute("trinhDo", trinhDos);

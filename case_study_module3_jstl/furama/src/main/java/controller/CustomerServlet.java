@@ -19,7 +19,6 @@ import java.util.Map;
 
 @WebServlet(name = "CustomerServlet", urlPatterns = "/customer")
 public class CustomerServlet extends HttpServlet {
-    CustomerReponsitoryImpl customerReponsitory = new CustomerReponsitoryImpl();
     ICRUDCustomer icrudCustomer = new CustomerServiceImpl();
     CustomertypeService customertypeService = new CustomertypeService();
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -76,10 +75,11 @@ public class CustomerServlet extends HttpServlet {
     }
 
     private void listCustomer(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        List<Customer> customerList = icrudCustomer.selectAllCustomer();
-        request.setAttribute("customerLists", customerList);
         List<CustomerType> customerListType = customertypeService.selectCustomerType();
         request.setAttribute("customerTypeLists", customerListType);
+
+        List<Customer> customerList = icrudCustomer.selectAllCustomer();
+        request.setAttribute("customerLists", customerList);
         RequestDispatcher dispatcher = request.getRequestDispatcher("view/customer/list.jsp");
         dispatcher.forward(request, response);
     }

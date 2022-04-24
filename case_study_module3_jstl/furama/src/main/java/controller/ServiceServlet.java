@@ -22,7 +22,6 @@ import java.util.Map;
 public class ServiceServlet extends HttpServlet {
     ICRUDServiceServeice icrudServiceServeice = new ServiceServeiceImpl();
     KieuThueReponsitory kieuThueReponsitory = new KieuThueReponsitory();
-    LoaiDichVuReponsitory loaiDichVuReponsitory = new LoaiDichVuReponsitory();
     LoaiDichVuSrevice loaiDichVuSrevice= new LoaiDichVuSrevice();
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -91,13 +90,13 @@ public class ServiceServlet extends HttpServlet {
     }
 
     private void listService(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        List<Service> serviceList = icrudServiceServeice.selectAllService();
-        request.setAttribute("serviceLists", serviceList);
         List<KieuThue> kieuThueList = kieuThueReponsitory.selectAllKieuThue();
         request.setAttribute("kieuThue", kieuThueList);
         List<LoaiDichVu> loaiDichVus = loaiDichVuSrevice.selectAllLoaiDichVu();
         request.setAttribute("maLoaiDichVu", loaiDichVus);
 
+        List<Service> serviceList = icrudServiceServeice.selectAllService();
+        request.setAttribute("serviceLists", serviceList);
         request.getRequestDispatcher("/view/service/list.jsp").forward(request, response);
 
     }

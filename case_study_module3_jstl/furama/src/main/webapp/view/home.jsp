@@ -363,7 +363,7 @@
 
                     </li>
                     <li class="nav-item">
-                        <a href="#" class="nav-link ">Contract</a>
+                        <a href="/contract" class="nav-link ">Contract</a>
                     </li>
                 </ul>
                 <form class="form-inline my-2 my-lg-0">
