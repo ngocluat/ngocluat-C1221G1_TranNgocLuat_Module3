@@ -1,9 +1,8 @@
 package service.cusumer_type_reponsitory;
 
 import model.CustomerType;
-import reponsitory.CustomerReponsitory.CustomerReponsitoryImpl;
-import reponsitory.CustomerType.CusumerTypeReponsitoryIpml;
-import reponsitory.CustomerType.ICusumerTypeReponsitory;
+import reponsitory.customer_type.CusumerTypeReponsitoryIpml;
+import reponsitory.customer_type.ICusumerTypeReponsitory;
 
 import java.util.List;
 

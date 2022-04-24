@@ -1,4 +1,4 @@
-package reponsitory.CustomerType;
+package reponsitory.customer_type;
 
 
 import model.CustomerType;

@@ -1,4 +1,4 @@
-package reponsitory.serviceReponsitory;
+package reponsitory.service_reponsitory;
 
 import model.Service;
 import reponsitory.ConnectDatabase;

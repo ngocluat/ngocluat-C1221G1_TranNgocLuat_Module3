@@ -2,7 +2,7 @@ package service.customer;
 
 import common.Validate;
 import model.Customer;
-import reponsitory.CustomerReponsitory.CustomerReponsitoryImpl;
+import reponsitory.customer_reponsitory.CustomerReponsitoryImpl;
 
 import java.sql.SQLException;
 import java.util.HashMap;

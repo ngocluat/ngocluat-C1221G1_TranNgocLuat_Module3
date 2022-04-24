@@ -12,9 +12,5 @@
 </head>
 <body>
 <h1>đã vào </h1>
-
-
-
-
 </body>
 </html>

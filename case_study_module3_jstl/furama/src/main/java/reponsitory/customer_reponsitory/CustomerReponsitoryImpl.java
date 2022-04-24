@@ -1,4 +1,4 @@
-package reponsitory.CustomerReponsitory;
+package reponsitory.customer_reponsitory;
 
 import model.Customer;
 import reponsitory.ConnectDatabase;

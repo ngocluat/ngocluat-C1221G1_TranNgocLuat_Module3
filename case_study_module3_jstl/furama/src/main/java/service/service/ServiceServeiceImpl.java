@@ -1,8 +1,8 @@
 package service.service;
 
 import model.Service;
-import reponsitory.serviceReponsitory.IServiceReponsitory;
-import reponsitory.serviceReponsitory.ServiceReponsitoryImpl;
+import reponsitory.service_reponsitory.IServiceReponsitory;
+import reponsitory.service_reponsitory.ServiceReponsitoryImpl;
 
 import java.util.HashMap;
 import java.util.List;

@@ -1,8 +1,8 @@
 package service.hop_dong_service;
 
 import model.HopDong;
-import reponsitory.contractRepository.ContracReponsitoryImpl;
-import reponsitory.contractRepository.IContract;
+import reponsitory.contract_repository.ContracReponsitoryImpl;
+import reponsitory.contract_repository.IContract;
 
 import java.util.List;
 

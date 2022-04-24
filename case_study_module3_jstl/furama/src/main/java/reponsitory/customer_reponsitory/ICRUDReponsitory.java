@@ -1,7 +1,6 @@
-package reponsitory.CustomerReponsitory;
+package reponsitory.customer_reponsitory;
 
 import model.Customer;
-import model.CustomerType;
 
 import java.sql.SQLException;
 import java.util.List;

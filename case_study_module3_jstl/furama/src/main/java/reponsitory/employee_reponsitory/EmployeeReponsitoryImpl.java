@@ -1,4 +1,4 @@
-package reponsitory.EmployeeReponsitory;
+package reponsitory.employee_reponsitory;
 
 import model.Employee;
 import reponsitory.ConnectDatabase;

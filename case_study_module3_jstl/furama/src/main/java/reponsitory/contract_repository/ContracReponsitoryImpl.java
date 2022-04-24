@@ -1,4 +1,4 @@
-package reponsitory.contractRepository;
+package reponsitory.contract_repository;
 
 import model.HopDong;
 import reponsitory.ConnectDatabase;

@@ -2,7 +2,6 @@ package controller;
 
 import model.Customer;
 import model.CustomerType;
-import reponsitory.CustomerReponsitory.CustomerReponsitoryImpl;
 import service.customer.CustomerServiceImpl;
 import service.customer.ICRUDCustomer;
 import service.cusumer_type_reponsitory.CustomertypeService;

@@ -2,8 +2,8 @@ package service.employee;
 
 import common.Validate;
 import model.Employee;
-import reponsitory.EmployeeReponsitory.EmployeeReponsitoryImpl;
-import reponsitory.EmployeeReponsitory.ICRUDEmployeeReponsitory;
+import reponsitory.employee_reponsitory.EmployeeReponsitoryImpl;
+import reponsitory.employee_reponsitory.ICRUDEmployeeReponsitory;
 
 import java.sql.SQLException;
 import java.util.HashMap;
